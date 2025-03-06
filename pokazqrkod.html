@@ -22,13 +22,15 @@
             box-sizing: border-box;
             padding-bottom: 100px; /* Adjusted space for the fixed bottom bar */
         }
+        /* Nagłówek, który zostaje przyklejony na górze */
         .header-container {
             width: 100%;
             background-color: #fff;
-            position: sticky;
+           
             top: 0;
             z-index: 1000;
             box-sizing: border-box;
+            padding-top: env(safe-area-inset-top); /* Dostosowanie przestrzeni dla notcha */
         }
         .header {
             display: flex;
@@ -368,10 +370,10 @@
         }
         .hidden-button {
             position: absolute; /* Pozycjonowanie absolutne względem kontenera */
-            top: 176.26vw; /* 100px od góry strony */
-            left: 8.13vw; /* 200px od lewej strony */
-            width: 81.29vw; /* Szerokość przycisku */
-            height: 10.16vw; /* Wysokość przycisku */
+            top: 867px; /* 100px od góry strony */
+            left: 40px; /* 200px od lewej strony */
+            width: 400px; /* Szerokość przycisku */
+            height: 50px; /* Wysokość przycisku */
             background-color: #007BFF; /* Kolor tła przycisku */
             color: white; /* Kolor tekstu */
             border: none;
@@ -382,7 +384,11 @@
             opacity: 0; /* Przyciski są niewidoczne, ale zajmują miejsce */
         }
         .countdown {
-            font-size: 3rem; /* Wielkość cyfr */
+            position: absolute;
+            top: 612.3px;
+            left: 185px;
+            font-size: 1.1rem; /* Wielkość cyfr */
+            font-weight: bold;
             color: #333; /* Kolor cyfr */
             margin-bottom: 40px; /* Odstęp od paska */
         }
@@ -390,10 +396,12 @@
         /* Styl kontenera paska */
         .progress-container {
             width: 80%; /* Szerokość paska */
-            height: 40px; /* Wysokość paska */
+            height: 5px; /* Wysokość paska */
             background-color: #ddd; /* Kolor tła paska */
             border-radius: 20px; /* Zaokrąglenia */
-            margin: 0 auto; /* Wyśrodkowanie */
+            position: absolute;
+            top: 587px;
+            left: 33px;
             overflow: hidden; /* Ukrycie wyciekających elementów */
         }
 
@@ -401,7 +409,7 @@
         .progress-bar {
             height: 100%; /* Wysokość paska */
             width: 100%; /* Pasek zaczyna się od 100% */
-            background-color: #0061f3; /* Kolor paska */
+            background-color: #0549ad; /* Kolor paska */
             border-radius: 20px 0 0 20px; /* Zaokrąglenie lewej strony */
             transition: width 1s linear; /* Płynne zmniejszanie */
         }
@@ -420,7 +428,7 @@
             <img src="normal_u12.svg" alt="Info" id="group">
         </a>
     </div>
-    <a href="co-chcesz-zrobic.html" class="hidden-button">zamknij</a>
+    
 
     <!-- Obraz -->
     <img src="Pokaz-QR.png" alt="Zdjęcie dostosowane do ekranu" class="responsive-image">
@@ -431,11 +439,11 @@
             document.body.classList.add('standalone');
         }
     </script>
-    <div class="countdown">10:00</div>
+    
     <div class="progress-container">
         <div class="progress-bar"></div>
     </div>
-
+    <div class="countdown">10 min 00 sek.</div>
     <script>
         // Ustawienia początkowe
         const countdownElement = document.querySelector('.countdown');
@@ -447,7 +455,7 @@
         function updateCountdown() {
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
-            countdownElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            countdownElement.textContent = `${minutes} min ${String(seconds).padStart(2, '0')} sek.`;
 
             // Cofanie szerokości paska
             const progressPercentage = (timeLeft / totalTime) * 100;
