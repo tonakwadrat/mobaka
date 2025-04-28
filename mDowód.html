@@ -465,6 +465,7 @@
         }
 
         .circle-button {
+        display: block;
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -477,6 +478,8 @@
         margin-bottom: 10px;
         background-color: white;
         background-size: 22px 22px;
+        text-decoration: none;
+        border: none;
         }
 
         .button-1 {
@@ -492,7 +495,7 @@
         }
 
         .button-4 {
-            background-image: url('unnamed w (4).png'); /* Ścieżka do obrazka dla czwartego kółka */
+            background-image: url('Unnamed w (4).png'); /* Ścieżka do obrazka dla czwartego kółka */
         }
 
         .circle-label {
@@ -514,6 +517,17 @@
             font-weight: normal;
             font-style: normal;
             }
+        .update-banner {
+            position: fixed;
+            bottom: 10vh; /* 30px od dołu ekranu */
+            left: 0;
+            width: 100%;
+            z-index: 999; /* pod bottom-nav jeśli bottom-nav ma 1000 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px 0; /* trochę przestrzeni wokół obrazka */
+        }
         
     </style>
 </head>
@@ -587,23 +601,23 @@
         <div class="actions"> 
             <div class="circle-actions">
                 <div class="circle-item">
-                    <button class="circle-button button-1"></button>
+                    <a href="co-chcesz-zrobic.html" class="circle-button button-1"></a>
                     <span class="circle-label">Potwierdź</span>
                     <span class="circle-label">swoje dane</span>
                 </div>
                 <div class="circle-item">
-                    <button class="circle-button button-2"></button>
+                    <a href="wysuwane-dane.html" class="circle-button button-2"></a>
                     <span class="circle-label">Dane</span>
                     <span class="circle-label">dowodu</span>
                     <span class="circle-label">osobistego</span>
                 </div>
                 <div class="circle-item">
-                    <button class="circle-button button-3"></button>
+                    <a href="błąd.html" class="circle-button button-3"></a>
                     <span class="circle-label">Zastrzeż</span>
                     <span class="circle-label">PESEL</span>
                 </div>
                 <div class="circle-item">
-                    <button class="circle-button button-4"></button>
+                    <a href="błąd.html" class="circle-button button-4"></a>
                     <span class="circle-label">Pozostałe</span>
                     <span class="circle-label">skróty</span>
                 </div>
@@ -638,22 +652,42 @@
                 <span>Usuń dokument</span>
             </div>
         </div>
+        <div class="update-banner" id="updateBanner" style="display: none;">
+            <img src="aktualizacja.png" alt="Aktualizacja" style="width: 100%; height: auto;">
+        </div>
     </div>
 
     <script>
         //tera 
         document.getElementById("aktualizuj").addEventListener("click", function() {
-    // Przechowujemy aktualny adres URL (stronę, z której pochodzi użytkownik)
     var currentUrl = window.location.href;
 
-    // Przekierowanie na inną stronę
+    // Zapamiętaj w localStorage, że aktualizacja jest w toku
+    localStorage.setItem('updating', 'true');
+
+    // Przekierowanie na stronę aktualizacji
     window.location.href = "Aktualizacja.html";
 
-    // Po 5 sekundach wracamy na stronę źródłową
+    // Po 5 sekundach wracamy na stronę
     setTimeout(function() {
-      window.location.href = currentUrl; // Powrót na stronę, z której pochodzi użytkownik
-    }, 5000); // 5000 ms = 5 sekund
-  });
+        window.location.href = currentUrl;
+    }, 5000);
+});
+
+// Po załadowaniu strony sprawdzamy, czy trzeba pokazać banner
+window.addEventListener('load', function() {
+    if (localStorage.getItem('updating') === 'true') {
+        var banner = document.getElementById("updateBanner");
+        banner.style.display = "flex"; // Pokaż kontener z obrazkiem
+
+        setTimeout(function() {
+            banner.style.display = "none"; // Schowaj po 2 sekundach
+        }, 2000);
+
+        // Usuń zapis z localStorage
+        localStorage.removeItem('updating');
+    }
+});
   //tera
             function updateDate() {
             let today = new Date();
@@ -798,5 +832,5 @@
     </script>
 </body>
 
-<!-- Mirrored from mdwd.cba.pl/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 Aug 2024 11:50:39 GMT -->
+
 </html>
