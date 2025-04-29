@@ -9,27 +9,43 @@
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f7f8fc;
+            background-color: #f4f6fb;
             color: #2f353f;
         }
-        .container {
+              /* Podstawowe ustawienia dla body i html */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
             width: 100%;
-            max-width: 414px;
-            margin: 0 auto;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 16px;
-            box-sizing: border-box;
-            padding-bottom: 100px; /* Adjusted space for the fixed bottom bar */
         }
+        
+        /* Kontener główny */
+        .container {
+        width: 100%;
+        max-width: 414px;
+        margin: 0 auto;
+        background-color: #f4f6fb;
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+        padding: 16px;
+        box-sizing: border-box;
+        padding-bottom: 100px; /* Dostosowana przestrzeń dla przyklejonego dolnego paska */
+        padding-top: env(safe-area-inset-top); /* Uwzględnienie notcha */
+        padding-top: 10px;
+    }
+
+        /* Nagłówek, który zostaje przyklejony na górze */
         .header-container {
             width: 100%;
-            background-color: #fff;
-            position: sticky;
+            background-color: #f4f6fb;
+           
             top: 0;
             z-index: 1000;
             box-sizing: border-box;
+            padding-top: env(safe-area-inset-top); /* Dostosowanie przestrzeni dla notcha */
         }
+
+        /* Nagłówek */
         .header {
             display: flex;
             justify-content: space-between;
@@ -38,11 +54,16 @@
             max-width: 414px;
             margin: 0 auto;
             box-sizing: border-box;
+            text-decoration: none;
+            width: 100%;
         }
+
         .header img {
             width: 20px;
             height: 20px;
         }
+
+        /* Tytuł nagłówka */
         .header h1 {
             font-family: 'Roboto Medium', 'Roboto', sans-serif;
             font-size: 18px;
@@ -50,8 +71,13 @@
             text-align: center;
             color: #2f353f;
             font-weight: normal;
-            flex-grow: 1;
+            flex-grow: 1; /* Wypełnia dostępne miejsce obok notcha */
+            text-align: center; /* Jeśli chcesz, by tekst był wyrównany do lewej */
+            padding-left: 10px; /* Dodatkowy odstęp z lewej strony */
         }
+        
+    
+
         .time {
             text-align: center;
             margin: 16px 0;
@@ -177,12 +203,19 @@
             background-color: transparent;
         }
         .label {
-            font-family: "Roboto Medium", "Roboto", sans-serif;
+            /* font-family: "Roboto Medium", "Roboto", sans-serif; */
+            font-family: 'Heebo-Medium', sans-serif;
+            line-height: 1.1; /* ręcznie kontrolujesz wysokość linii */
             font-weight: 500;
             display: block;
             margin-bottom: 5px;
             color: #1d1d1d;
             font-size: 17px;
+            text-decoration: none;
+            color: inherit; /* Przywraca kolor tekstu zgodny z resztą strony */
+            outline: none; /* Usuwa kontur, jeśli jest */
+
+
         }
         .description {
             color: #4a4a4a;
@@ -233,6 +266,8 @@
             border-radius: 12px;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15); /* More visible shadow */
             font-size: 18px;
+            text-decoration: none;
+            color: inherit;
         }
         .action-button img.arrow-icon {
             width: 14px; /* Adjusted size for smaller arrow icons */
@@ -259,6 +294,7 @@
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15); /* More visible shadow */
             font-size: 14px;
             color: #4a4a4a;
+            margin-bottom: 15px;
         }
         .last-update .last-update-text {
             color: #4a4a4a;
@@ -283,6 +319,8 @@
             cursor: pointer;
             font-size: 16px;
             border: none; /* Remove the border */
+            
+
         }
         #get-orientation {
             width: 100%;
@@ -328,6 +366,7 @@
             justify-content: space-around;
             padding: 10px 0 35px 0; /* Adjusted padding for more space */
             box-sizing: border-box;
+            z-index: 1000; /* Ustala warstwę na najwyższą, aby pasek był na wierzchu */
         }
         .bottom-nav-item {
             display: flex;
@@ -358,62 +397,269 @@
             height: 14px; /* Adjusted size for smaller arrow icons */
             object-fit: contain; /* Ensures icons are not stretched */
         }
-        /* Styl dla obrazu */
-        .responsive-image {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain; /* Zawsze całe zdjęcie widoczne */
+        .action-button2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+            font-size: 18px;
+            text-decoration: none;
+            color: inherit;
+            width: 300px; /* Ustalona szerokość */
+            cursor: pointer;
+            position: relative;
         }
-        .hidden-button {
-            position: absolute; /* Pozycjonowanie absolutne względem kontenera */
-            top: 184vw; /* 100px od góry strony */
-            left: 7.30vw; /* 200px od lewej strony */
-            width: 83.64vw; /* Szerokość przycisku */
-            height: 10.45vw; /* Wysokość przycisku */
-            background-color: #007BFF; /* Kolor tła przycisku */
-            color: white; /* Kolor tekstu */
-            border: none;
-            text-align: center;
-            line-height: 50px; /* Wyrównanie tekstu w pionie */
-            font-size: 16px;
-            border-radius: 10px; /* Zaokrąglone brzegi */
-            opacity: 0; /* Przyciski są niewidoczne, ale zajmują miejsce */
+        .image-replacement {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            
         }
-        .hidden-button2 {
-            position: absolute; /* Pozycjonowanie absolutne względem kontenera */
-            top: 198vw; /* 100px od góry strony */
-            left: 7.30vw; /* 200px od lewej strony */
-            width: 83.64vw; /* Szerokość przycisku */
-            height: 10.45vw; /* Wysokość przycisku */
-            background-color: #007BFF; /* Kolor tła przycisku */
-            color: white; /* Kolor tekstu */
-            border: none;
+        /* tera do wysuwanego */
+        .custom-action-button, .custom-image-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+            font-size: 18px;
+            text-decoration: none;
+            color: inherit;
+            
+            cursor: pointer;
+            position: relative;
+        }
+        .custom-image-container {
+            display: none;
+            flex-direction: column;
+        }
+        .custom-image-replacement {
+            width: 100%;
+            height: auto;
+            
+        }
+        body {
+        overflow: auto;
+        scrollbar-width: none; /* Firefox */
+        }
+        /* tera */
+        .circle-actions {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
             text-align: center;
-            line-height: 50px; /* Wyrównanie tekstu w pionie */
-            font-size: 16px;
-            border-radius: 10px; /* Zaokrąglone brzegi */
-            opacity: 0; /* Przyciski są niewidoczne, ale zajmują miejsce */
+        }
+
+        .circle-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .circle-button {
+        display: block;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
+        margin-bottom: 10px;
+        background-color: white;
+        background-size: 22px 22px;
+        text-decoration: none;
+        border: none;
+        }
+
+        .button-1 {
+            background-image: url('Projekt bez nazwy (29).png'); /* Ścieżka do obrazka dla pierwszego kółka */
+        }
+
+        .button-2 {
+            background-image: url('Projekt bez nazwy (30).png'); /* Ścieżka do obrazka dla drugiego kółka */
+        }
+
+        .button-3 {
+            background-image: url('kludka.png'); /* Ścieżka do obrazka dla trzeciego kółka */
+        }
+
+        .button-4 {
+            background-image: url('unnamed w (4).png'); /* Ścieżka do obrazka dla czwartego kółka */
+        }
+
+        .circle-label {
+            font-family: 'Heebo-Regular', sans-serif;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #333; /* kolor tekstu */
+            line-height: 0.5; /* zmniejszony odstęp między liniami */
+        }
+        @font-face {
+            font-family: 'Heebo-Medium';
+            src: url('Heebo-Medium.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            }
+        @font-face {
+            font-family: 'Heebo-Regular';
+            src: url('Heebo-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            }
+        .update-banner {
+            position: fixed;
+            bottom: 11vh; /* 30px od dołu ekranu */
+            left: 0;
+            width: 100%;
+            z-index: 999; /* pod bottom-nav jeśli bottom-nav ma 1000 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px 0; /* trochę przestrzeni wokół obrazka */
+        }
+        .zdjeciewprzycisk {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+            background-image: url('danedow.png');
+            background-size: cover;    /* ← dopasowanie obrazka do całego kontenera */
+            background-position: center; /* ← wyśrodkowanie */
+            background-repeat: no-repeat;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15); /* More visible shadow */
+            width: 343px;           /* ← musisz ustawić szerokość */
+            height: 312px;          /* ← musisz ustawić wysokość */
+           
+        }
+        .zdjeciewprzycisk {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+            background-image: url('iddetails.png');
+            background-size: cover;    /* ← dopasowanie obrazka do całego kontenera */
+            background-position: center; /* ← wyśrodkowanie */
+            background-repeat: no-repeat;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15); /* More visible shadow */
+            width: 343px;           /* ← musisz ustawić szerokość */
+            height: 312px;          /* ← musisz ustawić wysokość */
+            margin-bottom: 15px;
+           
+        }
+        
+        .zdjeciewprzycisk2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+            background-image: url('iddet2.png');
+            background-size: cover;    /* ← dopasowanie obrazka do całego kontenera */
+            background-position: center; /* ← wyśrodkowanie */
+            background-repeat: no-repeat;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15); /* More visible shadow */
+            width: 343px;           /* ← musisz ustawić szerokość */
+            height: 30px;          /* ← musisz ustawić wysokość */
+            margin-bottom: 15px;
+           
         }
     </style>
 </head>
 <body>
-    <!-- Obraz -->
-    <img src="Dane md.png" alt="Zdjęcie dostosowane do ekranu" class="responsive-image">
-   
-    <a href="wysuwane-dane.html" class="hidden-button">zamknij</a>
-    <a href="mDowód.html" class="hidden-button2">zamknij</a>
+    <div class="header-container">
+        <a class="header" href="mDowód.html">
+            <img src="normal_u8%20(1).svg" alt="Back" id="back-arrow">
+            <h1>Dane dowodu osobistego</h1>
+            <img src="normal_u12.svg" alt="Info" id="group">
+        </a>
+    </div>
+    <div class="bottom-nav">
+        <a class="bottom-nav-item active" href="stronaglowna.html">
+            <img src="unnamed%20w%20(5).png" alt="Pulpit">
+            <span>Pulpit</span>
+        </a>
+        <a class="bottom-nav-item" href="dokumenty.html">
+            <img src="unnamed%20(1).png" alt="Dokumenty">
+            <span>Dokumenty</span>
+        </a>
+        <a class="bottom-nav-item" href="usługi.html">
+            <img src="unnamed%20(2).png" alt="Usługi">
+            <span>Usługi</span>
+        </a>
+        <a class="bottom-nav-item" href="co-chcesz-zrobic.html">
+            <img src="unnamed%20(3).png" alt="Kod QR">
+            <span>Kod QR</span>
+        </a>
+        <a class="bottom-nav-item" href="wiecej.html">
+            <img src="unnamed%20(4).png" alt="Więcej">
+            <span>Więcej</span>
+            
+        </a>
+    </div>
+    <div class="container">
+        <div class="zdjeciewprzycisk"></div>
+        
+        <div class="last-update">
+            <div>
+                <div class="last-update-text">Ostatnia aktualizacja</div>
+                <div class="last-update-date" id="lastUpdate"></div>
+            </div>
+            <button id="aktualizuj">Aktualizuj</button>
 
-   
-    <script>
-        // Detect if running as a Web Clip and apply specific styles
-        if (window.navigator.standalone) {
-            document.body.classList.add('standalone');
-        }
-        window.scrollTo(0,48);
-        window.onscroll = () => 
-            {
-            window.scrollTo(0,48);
-            }
+        </div>
+        <div class="zdjeciewprzycisk2"></div>
+        <div class="update-banner" id="updateBanner" style="display: none;">
+            <img src="aktualizacja.png" alt="Aktualizacja" style="width: 100%; height: auto;">
+        </div>
+
+    </div>
+    <script> 
+         //tera 
+         document.getElementById("aktualizuj").addEventListener("click", function() {
+    var currentUrl = window.location.href;
+
+    // Zapamiętaj w localStorage, że aktualizacja jest w toku
+    localStorage.setItem('updating', 'true');
+
+    // Przekierowanie na stronę aktualizacji
+    window.location.href = "Aktualizacja.html";
+
+    // Po 5 sekundach wracamy na stronę
+    setTimeout(function() {
+        window.location.href = currentUrl;
+    }, 5000);
+});
+
+// Po załadowaniu strony sprawdzamy, czy trzeba pokazać banner
+window.addEventListener('load', function() {
+    if (localStorage.getItem('updating') === 'true') {
+        var banner = document.getElementById("updateBanner");
+        banner.style.display = "flex"; // Pokaż kontener z obrazkiem
+
+        setTimeout(function() {
+            banner.style.display = "none"; // Schowaj po 2 sekundach
+        }, 2000);
+
+        // Usuń zapis z localStorage
+        localStorage.removeItem('updating');
+    }
+});
     </script>
 </body>
 </html>
