@@ -298,11 +298,13 @@
         }
         .last-update .last-update-text {
             color: #4a4a4a;
+            font-family: 'Heebo-Medium';
         }
         .last-update .last-update-date {
-            font-family: "Roboto Medium", "Roboto", sans-serif;
+            font-family: "Heebo-Medium", sans-serif;
             font-size: 16px;
             color: #1d1d1d;
+
         }
         #aktualizuj {
             width: 120px;
@@ -660,6 +662,44 @@ window.addEventListener('load', function() {
         localStorage.removeItem('updating');
     }
 });
+function updateDate() {
+            let today = new Date();
+            let formattedDate = today.toLocaleDateString("pl-PL");
+            document.getElementById("lastUpdate").textContent = formattedDate;
+        }
+        
+        document.getElementById("aktualizuj").addEventListener("click", updateDate);
+        
+        window.onload = updateDate;
+        
+          function toggleCustomImage() {
+            const button = document.getElementById('customButton');
+            const imageContainer = document.getElementById('customImageContainer');
+            
+            // Sprawdzamy, czy przycisk jest widoczny
+            if (button.style.display !== 'none') {
+                imageContainer.style.display = 'flex';
+                button.style.display = 'none';
+            } else {
+                imageContainer.style.display = 'none';
+                button.style.display = 'flex';
+            }
+        }
+       
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            const timeString = `Czas: ${hours}:${minutes}:${seconds} ${day}.${month}.${year}`;
+            document.getElementById('data').textContent = timeString;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
     </script>
 </body>
 </html>
