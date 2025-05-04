@@ -558,7 +558,14 @@
             height: 312px;          /* ← musisz ustawić wysokość */
            
         }
-        
+        #hologram-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            transition: background 0.4s ease, opacity 0.4s ease;
+            pointer-events: none;
+}
     </style>
 </head>
 <body>
@@ -688,62 +695,106 @@
 
     <script>
         const overlay = document.getElementById('hologram-overlay');
-const button = document.getElementById('enable-motion');
+        const button = document.getElementById('enable-motion');
+    
+        const rainbowGradient = `linear-gradient(135deg,
+            #ff007f 0%,
+            #ff7f00 25%,
+            #ffff00 50%,
+            #00ff00 75%,
+            #00ffff 100%)`;
+    
+        let baseline = { x: 0, y: 0 };
+        const gray = 'rgba(128,128,128,0.4)';
+        const bufferThreshold = 10; // odchylenie, po którym szary stopniowo zanika
+        const colorThreshold = 35; // po tym pojawia się już pełen gradient
+    
+       function updateOverlay(x, y) {
+    const dx = x - baseline.x;
+    const dy = y - baseline.y;
+    const delta = Math.sqrt(dx * dx + dy * dy);
 
-function updateOverlay(x, y, z) {
-    const intensity = Math.sqrt(x * x + y * y + z * z);
-    const minThreshold = 45;
-    const maxThreshold = 120;
+    const bufferThreshold = 10;
+    const colorThreshold = 35;
+    const maxThreshold = 90;
 
-    if (intensity > minThreshold) {
-        const norm = Math.min((intensity - minThreshold) / (maxThreshold - minThreshold), 1);
-        const opacity = norm.toFixed(2);
+    // Zmieniamy kąt gradientu w zależności od kierunku
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 180;
 
-        const posX = 50 + (x / 2);
-        const posY = 50 + (y / 2);
-
-        overlay.style.opacity = opacity;
-        overlay.style.backgroundImage = `radial-gradient(circle at ${posX}% ${posY}%,
-            rgba(255, 182, 193, ${0.3 + 0.4 * norm}),
-            rgba(200, 201, 205, ${0.2 + 0.3 * norm}),
-            rgba(173, 216, 230, ${0.2 + 0.3 * norm}),
-            rgba(255, 255, 102, ${0.2 + 0.3 * norm})
-        )`;
+    if (delta < bufferThreshold) {
+        overlay.style.opacity = 1;
+        overlay.style.background = 'rgba(128,128,128,0.4)';
     } else {
-        overlay.style.opacity = 0;
+        const norm = Math.min((delta - bufferThreshold) / (maxThreshold - bufferThreshold), 1);
+
+        // Łagodne przejście między szarym a kolorami
+        overlay.style.opacity = 1;
+        overlay.style.background = `linear-gradient(${angle}deg,
+            rgba(128,128,128,${1 - norm}) 0%,
+            rgba(255, 0, 127, ${0.1 + 0.3 * norm}) 25%,
+            rgba(255, 127, 0, ${0.1 + 0.3 * norm}) 45%,
+            rgba(255, 255, 0, ${0.1 + 0.3 * norm}) 65%,
+            rgba(0, 255, 0, ${0.1 + 0.3 * norm}) 85%,
+            rgba(0, 255, 255, ${0.1 + 0.3 * norm}) 100%)`;
     }
 }
-
-button.addEventListener('click', () => {
-    if (typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function') {
-        // iOS 13+ — trzeba poprosić o pozwolenie
-        DeviceOrientationEvent.requestPermission()
-            .then(permissionState => {
-                if (permissionState === 'granted') {
-                    window.addEventListener('deviceorientation', event => {
-                        const x = event.gamma || 0;
-                        const y = event.beta || 0;
-                        const z = event.alpha || 0;
-                        updateOverlay(x, y, z);
-                    });
-                    button.style.display = 'none'; // ukryj przycisk po aktywacji
-                } else {
-                    alert('Nie udzielono dostępu do czujników ruchu.');
-                }
-            })
-            .catch(console.error);
-    } else {
-        // Android lub starsze iOS bez potrzeby zgody
-        window.addEventListener('deviceorientation', event => {
-            const x = event.gamma || 0;
-            const y = event.beta || 0;
-            const z = event.alpha || 0;
-            updateOverlay(x, y, z);
-        });
-        button.style.display = 'none';
-    }
-});
+    
+        function enableMotionTracking() {
+            function handle(x, y, z) {
+                updateOverlay(x, y);
+            }
+    
+            if (typeof DeviceOrientationEvent !== 'undefined' &&
+                typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(state => {
+                        if (state === 'granted') {
+                            window.addEventListener('deviceorientation', e => {
+                                const x = e.gamma || 0;
+                                const y = e.beta || 0;
+                                const z = e.alpha || 0;
+                                if (baseline.x === 0 && baseline.y === 0) {
+                                    baseline = { x, y };
+                                }
+                                handle(x, y, z);
+                            });
+                            button.style.display = 'none';
+                        } else {
+                            alert('Brak dostępu do czujników.');
+                        }
+                    })
+                    .catch(console.error);
+            } else if ('DeviceOrientationEvent' in window) {
+                window.addEventListener('deviceorientation', e => {
+                    const x = e.gamma || 0;
+                    const y = e.beta || 0;
+                    const z = e.alpha || 0;
+                    if (baseline.x === 0 && baseline.y === 0) {
+                        baseline = { x, y };
+                    }
+                    handle(x, y, z);
+                });
+                button.style.display = 'none';
+            } else {
+                // PC: symulacja myszką
+                document.addEventListener('mousemove', e => {
+                    const centerX = window.innerWidth / 2;
+                    const centerY = window.innerHeight / 2;
+    
+                    const x = ((e.clientX - centerX) / centerX) * 90;
+                    const y = ((e.clientY - centerY) / centerY) * 90;
+    
+                    if (baseline.x === 0 && baseline.y === 0) {
+                        baseline = { x, y };
+                    }
+    
+                    updateOverlay(x, y);
+                });
+                button.style.display = 'none';
+            }
+        }
+    
+        button.addEventListener('click', enableMotionTracking);
         //tera 
         document.getElementById("aktualizuj").addEventListener("click", function() {
     var currentUrl = window.location.href;
